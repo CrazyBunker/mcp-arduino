@@ -1,0 +1,18 @@
+# Binary
+/arduino-mcp
+/arduino-mcp.exe
+
+# Build artifacts
+/tmp/
+
+# Environment / secrets
+.env
+*.env.local
+.serena
+# Prompts and local instructions
+PROMPT.md
+COMPILATION_INSTRUCTION.md
+
+# OS files
+.DS_Store
+Thumbs.db
