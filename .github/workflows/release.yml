@@ -12,8 +12,11 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        goos: [linux, darwin]
+        goos: [linux, darwin, windows]
         goarch: [amd64, arm64]
+        exclude:
+          - goos: windows
+            goarch: arm64
     steps:
       - uses: actions/checkout@v4
 
@@ -25,8 +28,11 @@ jobs:
         env:
           GOOS: ${{ matrix.goos }}
           GOARCH: ${{ matrix.goarch }}
+        shell: bash
         run: |
-          BINARY=arduino-mcp-${{ matrix.goos }}-${{ matrix.goarch }}
+          EXT=""
+          if [ "${{ matrix.goos }}" = "windows" ]; then EXT=".exe"; fi
+          BINARY="arduino-mcp-${{ matrix.goos }}-${{ matrix.goarch }}$EXT"
           go build -o "$BINARY" ./cmd/arduino-mcp/
           sha256sum "$BINARY" > "$BINARY.sha256"
 
@@ -40,3 +46,4 @@ jobs:
         with:
           files: arduino-mcp-*
           generate_release_notes: true
+          make_latest: true
